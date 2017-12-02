@@ -137,7 +137,7 @@ local function UpdateBones(pLegs)
 	local tNewTable
 	
 	if (pPlayer:InVehicle() and not pPlayer:GetAllowWeaponsInVehicle()) then
-		tNewTable = tTwoHands
+		tNewTable = gs.legs.VisibleBones.TwoHands
 	else
 		local pWeapon = pPlayer:GetActiveWeapon()
 		
@@ -146,12 +146,12 @@ local function UpdateBones(pLegs)
 				local iHands = gs.IsType(pWeapon, gs.TYPE_GSENTITY) and (pWeapon.FreeHands or gs.entities.GetHoldTypeFreeHands(pWeapon:GetHoldType(true)))
 					or tOverrideModels[string_lower(pWeapon:GetViewModel())] or gs.entities.GetHoldTypeFreeHands(pWeapon:GetHoldType())
 				
-				tNewTable = iHands == 1 and gs.legs.VisibleBones.OneHand or iHands == 2 and tTwoHands or gs.legs.VisibleBones.NoHands
+				tNewTable = gs.legs.VisibleBones[iHands == 1 and "OneHand" or iHands == 2 and "TwoHands" or "NoHands"]
 			else
 				tNewTable = gs.legs.VisibleBones.NoHands
 			end
 		else
-			tNewTable = tTwoHands
+			tNewTable = gs.legs.VisibleBones.TwoHands
 		end
 	end
 	
