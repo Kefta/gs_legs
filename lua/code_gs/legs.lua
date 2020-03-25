@@ -164,6 +164,8 @@ local function UpdateBones(pLegs)
 	end
 	
 	pLegs:CopyVisualData(pPlayer, true)
+	pLegs:CopyAnimationData(pPlayer)
+	pLegs:CopyPoseParameters(pPlayer)
 	
 	if (bModelUpdate or not (tNewTable == tPrevTable and pPlayer == pPrevPlayer)) then
 		tPrevTable = tNewTable
