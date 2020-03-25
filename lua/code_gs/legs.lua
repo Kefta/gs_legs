@@ -26,102 +26,120 @@ local render_EnableClipping = render.EnableClipping
 local render_PopCustomClipPlane = render.PopCustomClipPlane
 local render_PushCustomClipPlane = render.PushCustomClipPlane
 
-gs.legs = {
-	m_pLegs = NULL,
-	m_nCallback = -1
-}
-
-gs.legs.OffsetLimits = {
-	Min = -50,
-	Max = 0
-}
-
--- https://github.com/garrynewman/garrysmod/pull/1347
-gs.legs.OverrideModels = {
-	["models/weapons/c_medkit.mdl"] = 0,
-	["models/weapons/c_toolgun.mdl"] = 0,
-	["models/weapons/v_toolgun.mdl"] = 0
-}
-
-do
-	local function BaseBones()
-		return {
-			["ValveBiped.Bip01_Pelvis"] = true,
-			["ValveBiped.Bip01_Spine"] = true,
-			["ValveBiped.Bip01_Spine1"] = true,
-			["ValveBiped.Bip01_Spine2"] = true,
-			["ValveBiped.Bip01_Spine4"] = true,
-			["ValveBiped.Bip01_R_Thigh"] = true,
-			["ValveBiped.Bip01_R_Calf"] = true,
-			["ValveBiped.Bip01_R_Foot"] = true,
-			["ValveBiped.Bip01_R_Toe0"] = true,
-			["ValveBiped.Bip01_L_Thigh"] = true,
-			["ValveBiped.Bip01_L_Calf"] = true,
-			["ValveBiped.Bip01_L_Foot"] = true,
-			["ValveBiped.Bip01_L_Toe0"] = true,
-			["ValveBiped.Jacket1_bone"] = true,
-			["ValveBiped.Jacket0_bone"] = true
-		}
-	end
-	
-	local function OneHand()
-		local tbl = BaseBones()
-		tbl["ValveBiped.Bip01_L_Clavicle"] = true
-		tbl["ValveBiped.Bip01_L_UpperArm"] = true
-		tbl["ValveBiped.Bip01_L_Forearm"] = true
-		tbl["ValveBiped.Bip01_L_Hand"] = true
-		tbl["ValveBiped.Anim_Attachment_LH"] = true
-		tbl["ValveBiped.Bip01_L_Finger4"] = true
-		tbl["ValveBiped.Bip01_L_Finger41"] = true
-		tbl["ValveBiped.Bip01_L_Finger42"] = true
-		tbl["ValveBiped.Bip01_L_Finger3"] = true
-		tbl["ValveBiped.Bip01_L_Finger31"] = true
-		tbl["ValveBiped.Bip01_L_Finger32"] = true
-		tbl["ValveBiped.Bip01_L_Finger2"] = true
-		tbl["ValveBiped.Bip01_L_Finger21"] = true
-		tbl["ValveBiped.Bip01_L_Finger22"] = true
-		tbl["ValveBiped.Bip01_L_Finger1"] = true
-		tbl["ValveBiped.Bip01_L_Finger11"] = true
-		tbl["ValveBiped.Bip01_L_Finger12"] = true
-		tbl["ValveBiped.Bip01_L_Finger0"] = true
-		tbl["ValveBiped.Bip01_L_Finger01"] = true
-		tbl["ValveBiped.Bip01_L_Finger02"] = true
-		
-		return tbl
-	end
-	
-	local tTwoHands = OneHand()
-	
-	tTwoHands["ValveBiped.Bip01_R_Clavicle"] = true
-	tTwoHands["ValveBiped.Bip01_R_UpperArm"] = true
-	tTwoHands["ValveBiped.Bip01_R_Forearm"] = true
-	tTwoHands["ValveBiped.Bip01_R_Hand"] = true
-	tTwoHands["ValveBiped.Anim_Attachment_RH"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger4"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger41"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger42"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger3"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger31"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger32"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger2"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger21"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger22"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger1"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger11"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger12"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger0"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger01"] = true
-	tTwoHands["ValveBiped.Bip01_R_Finger02"] = true
-	
-	gs.legs.VisibleBones = {
-		NoHands = BaseBones(),
-		OneHand = OneHand(),
-		TwoHands = tTwoHands
+local function BaseBones()
+	return {
+		["ValveBiped.Bip01_Pelvis"] = true,
+		["ValveBiped.Bip01_Spine"] = true,
+		["ValveBiped.Bip01_Spine1"] = true,
+		["ValveBiped.Bip01_Spine2"] = true,
+		["ValveBiped.Bip01_Spine4"] = true,
+		["ValveBiped.Bip01_R_Thigh"] = true,
+		["ValveBiped.Bip01_R_Calf"] = true,
+		["ValveBiped.Bip01_R_Foot"] = true,
+		["ValveBiped.Bip01_R_Toe0"] = true,
+		["ValveBiped.Bip01_L_Thigh"] = true,
+		["ValveBiped.Bip01_L_Calf"] = true,
+		["ValveBiped.Bip01_L_Foot"] = true,
+		["ValveBiped.Bip01_L_Toe0"] = true,
+		["ValveBiped.Jacket1_bone"] = true,
+		["ValveBiped.Jacket0_bone"] = true
 	}
 end
 
+local function OneHand()
+	local tbl = BaseBones()
+	tbl["ValveBiped.Bip01_L_Clavicle"] = true
+	tbl["ValveBiped.Bip01_L_UpperArm"] = true
+	tbl["ValveBiped.Bip01_L_Forearm"] = true
+	tbl["ValveBiped.Bip01_L_Hand"] = true
+	tbl["ValveBiped.Anim_Attachment_LH"] = true
+	tbl["ValveBiped.Bip01_L_Finger4"] = true
+	tbl["ValveBiped.Bip01_L_Finger41"] = true
+	tbl["ValveBiped.Bip01_L_Finger42"] = true
+	tbl["ValveBiped.Bip01_L_Finger3"] = true
+	tbl["ValveBiped.Bip01_L_Finger31"] = true
+	tbl["ValveBiped.Bip01_L_Finger32"] = true
+	tbl["ValveBiped.Bip01_L_Finger2"] = true
+	tbl["ValveBiped.Bip01_L_Finger21"] = true
+	tbl["ValveBiped.Bip01_L_Finger22"] = true
+	tbl["ValveBiped.Bip01_L_Finger1"] = true
+	tbl["ValveBiped.Bip01_L_Finger11"] = true
+	tbl["ValveBiped.Bip01_L_Finger12"] = true
+	tbl["ValveBiped.Bip01_L_Finger0"] = true
+	tbl["ValveBiped.Bip01_L_Finger01"] = true
+	tbl["ValveBiped.Bip01_L_Finger02"] = true
+	
+	return tbl
+end
+
+local tTwoHands = OneHand()
+
+tTwoHands["ValveBiped.Bip01_R_Clavicle"] = true
+tTwoHands["ValveBiped.Bip01_R_UpperArm"] = true
+tTwoHands["ValveBiped.Bip01_R_Forearm"] = true
+tTwoHands["ValveBiped.Bip01_R_Hand"] = true
+tTwoHands["ValveBiped.Anim_Attachment_RH"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger4"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger41"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger42"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger3"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger31"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger32"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger2"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger21"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger22"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger1"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger11"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger12"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger0"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger01"] = true
+tTwoHands["ValveBiped.Bip01_R_Finger02"] = true
+
+gs.legs = {
+	Entity = NULL,
+	Callback = -1,
+	OffsetLimits = {
+		Min = -50,
+		Max = 0
+	},
+	-- https://github.com/garrynewman/garrysmod/pull/1347
+	OverrideModels = {
+		["models/weapons/c_medkit.mdl"] = 0,
+		["models/weapons/c_toolgun.mdl"] = 0,
+		["models/weapons/v_toolgun.mdl"] = 0
+	},
+	VisibleBones = {
+		NoHands = BaseBones(),
+		OneHand = OneHand(),
+		TwoHands = tTwoHands
+	},
+	-- This will be ignored in favour of gs.entities.GetHoldTypeFreeHands if gs.entities is loaded
+	HoldTypeHands = {
+		[""] = 2,
+		pistol = 0,
+		smg = 0,
+		grenade = 0,
+		ar2 = 0,
+		shotgun = 0,
+		rpg = 0,
+		physgun = 0,
+		crossbow = 0,
+		melee = 1,
+		slam = 0,
+		normal = 2,
+		fist = 0,
+		melee2 = 0,
+		passive = 0,
+		knife = 0,
+		duel = 0,
+		camera = 0,
+		magic = 1,
+		revolver = 0
+	}
+}
+
 local gs_legs = CreateConVar("gs_legs", "1", FCVAR_ARCHIVE, "Enables showing player legs in first-person")
-local gs_legs_offset = CreateConVar("gs_legs_offset", "-20", FCVAR_ARCHIVE, "Position offset multiplier between " .. gs.legs.OffsetLimits.Min .. " and " .. gs.legs.OffsetLimits.Max)
+local gs_legs_offset = CreateConVar("gs_legs_offset", "-25", FCVAR_ARCHIVE, "Position offset multiplier between " .. gs.legs.OffsetLimits.Min .. " and " .. gs.legs.OffsetLimits.Max)
 local gs_legs_clipfix = CreateConVar("gs_legs_clipfix", "1", FCVAR_ARCHIVE, "Fixes legs being too high while jumping or crouching, but makes landing look jerky")
 local tVisibleBoneMappings = {}
 local tPrevTable, pPrevPlayer, sPrevModel
@@ -142,14 +160,16 @@ local function UpdateBones(pLegs)
 		local pWeapon = pPlayer:GetActiveWeapon()
 		
 		if (pWeapon:IsValid()) then
+			local iHands
+			
 			if (bEntities) then
-				local iHands = gs.IsType(pWeapon, gs.TYPE_GSENTITY) and (pWeapon.FreeHands or gs.entities.GetHoldTypeFreeHands(pWeapon:GetHoldType(true)))
+				iHands = gs.IsType(pWeapon, gs.TYPE_GSENTITY) and (pWeapon.FreeHands or gs.entities.GetHoldTypeFreeHands(pWeapon:GetHoldType(true)))
 					or tOverrideModels[string_lower(pWeapon:GetViewModel())] or gs.entities.GetHoldTypeFreeHands(pWeapon:GetHoldType())
-				
-				tNewTable = gs.legs.VisibleBones[iHands == 1 and "OneHand" or iHands == 2 and "TwoHands" or "NoHands"]
 			else
-				tNewTable = gs.legs.VisibleBones.NoHands
+				iHands = gs.legs.HoldTypeHands[string_lower(pWeapon:GetHoldType())]
 			end
+			
+			tNewTable = gs.legs.VisibleBones[iHands == 1 and "OneHand" or iHands == 2 and "TwoHands" or "NoHands"]
 		else
 			tNewTable = gs.legs.VisibleBones.TwoHands
 		end
@@ -159,7 +179,7 @@ local function UpdateBones(pLegs)
 	local bModelUpdate = sModel ~= sPrevModel
 	
 	if (bModelUpdate) then
-		pPlayer:SetModel(sModel)
+		pLegs:SetModel(sModel)
 		sPrevModel = sModel
 	end
 	
@@ -254,7 +274,7 @@ end
 -- FIXME: Draw local player shadow in first-person
 
 hook.Add("InitPostEntity", "gs_legs", function()
-	local pPlayer = LocalOrSpectatorEntity()
+	local pPlayer = LocalPlayer()
 	
 	if (pPlayer:IsValid()) then
 		local pLegs = ClientsideModel(pPlayer:GetModel())
@@ -270,9 +290,8 @@ hook.Add("InitPostEntity", "gs_legs", function()
 			pPlayer:DeleteOnRemove(pLegs)
 		end
 		
-		local tLegs = gs.legs
-		tLegs.m_pLegs = pLegs
-		tLegs.m_nCallback = nCallback
+		gs.legs.Entity = pLegs
+		gs.legs.Callback = nCallback
 	end
 end)
 
@@ -283,7 +302,7 @@ hook.Add("PreDrawOpaqueRenderables", "gs_legs", function()
 	local pPlayer = LocalOrSpectatorEntity()
 	
 	if (pPlayer:IsPlayer() and pPlayer:Alive() and not (pPlayer:InVehicle() or pPlayer:ShouldDrawLocalPlayer())) then
-		local pLegs = gs.legs.m_pLegs
+		local pLegs = gs.legs.Entity
 		
 		if (pLegs:IsValid()) then
 			local bEnabled = render_EnableClipping(true)
@@ -310,7 +329,7 @@ hook.Add("PreDrawOpaqueRenderables", "gs_legs", function()
 				-- best way to move the knees from the viewport
 				if (gs_legs_clipfix:GetBool()) then
 					if (pPlayer:Crouching()) then
-						vPos[3] = vPos[3] - (pPlayer:OnGround() and 8 or 20)
+						vPos[3] = vPos[3] - (pPlayer:OnGround() and 8 or 20) -- FIXME: Scale this by model dimensions somehow
 					--[[elseif (not pPlayer:OnGround()) then
 						vPos[3] = vPos[3] - 8]]
 					end
